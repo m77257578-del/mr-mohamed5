@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "منصة الأستاذ محمد عبد المقصود",
+  "short_name": "منصة الأستاذ",
+  "description": "منصة تعليمية للطلاب وأولياء الأمور",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f2e8",
+  "theme_color": "#102a43",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
