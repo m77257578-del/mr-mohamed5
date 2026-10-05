@@ -95,6 +95,8 @@ async function route(req, res) {
 
   // ملفات الواجهة
   if (m === 'GET' && (p === '/' || p === '/index.html')) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }); return res.end(fs.readFileSync(path.join(__dirname, 'index.html'))); }
+  if (m === 'GET' && p === '/manifest.webmanifest') { res.writeHead(200, { 'Content-Type': 'application/manifest+json; charset=utf-8', 'Cache-Control': 'no-cache' }); return res.end(fs.readFileSync(path.join(__dirname, 'manifest.webmanifest'))); }
+  if (m === 'GET' && (p === '/sw.js' || p === '/app-icon.svg')) { res.writeHead(200, { 'Content-Type': p === '/sw.js' ? 'application/javascript; charset=utf-8' : 'image/svg+xml', 'Cache-Control': 'no-cache' }); return res.end(fs.readFileSync(path.join(__dirname, p.slice(1)))); }
   if (m === 'GET' && p === '/hero') { if (!db.settings.heroFile) throw E(404, ''); return serveFile(req, res, db.settings.heroFile, 'hero', db.settings.heroMime); }
   if (m === 'GET' && p === '/api/public') return send(res, 200, { name: db.settings.name, hero: db.settings.heroFile ? '/hero?v=' + db.settings.heroV : '' });
 

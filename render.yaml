@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ostaz-mohamed-platform
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/public
+    disk:
+      name: platform-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: TEACHER_PASSWORD
+        sync: false

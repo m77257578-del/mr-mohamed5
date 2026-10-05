@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="ar" dir="rtl"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102a43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="منصة الأستاذ">
+<link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/app-icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/app-icon.svg">
 <title>منصة الأستاذ محمد عبد المقصود</title>
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -27,7 +29,8 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{
  <div class="grid items-center gap-7 lg:grid-cols-[1.25fr_.75fr]"><section>
   <p class="mb-3 font-bold" style="color:#f7bb5a">منصة تعليمية متكاملة من رابعة ابتدائي حتى ثالثة ثانوي</p>
   <h1 id="pname" class="mb-3 text-3xl font-extrabold text-white">منصة الأستاذ محمد عبد المقصود</h1>
-  <p class="max-w-2xl leading-8" style="color:#dcecf2">فيديوهات ومذكرات وواجبات وامتحانات إلكترونية، مع متابعة مخصصة للطالب وولي الأمر.</p></section>
+  <p class="max-w-2xl leading-8" style="color:#dcecf2">فيديوهات ومذكرات وواجبات وامتحانات إلكترونية، مع متابعة مخصصة للطالب وولي الأمر.</p>
+  <button id="install-app" class="btn gold mt-4 inline-flex items-center gap-2" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>تثبيت التطبيق</button></section>
   <img id="hero" class="mx-auto aspect-[4/3] w-full max-w-sm rounded-[1.5rem] object-cover" style="box-shadow:14px 14px 0 rgba(233,162,59,.7)" alt="" src="https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=1280"></div></div></header>
 
 <nav class="mx-auto mt-5 grid max-w-6xl grid-cols-2 gap-2 px-4 sm:px-8"><button class="tab on rounded-t-xl py-3" data-tab="student">مساحة الطالب</button><button class="tab rounded-t-xl py-3" data-tab="parent">مساحة ولي الأمر</button></nav>
@@ -78,7 +81,8 @@ const waL=m=>'https://wa.me/'+WA+'?text='+encodeURIComponent(m);
 $('wa').href=waL('السلام عليكم يا أستاذ محمد، عندي استفسار عن المنصة.');
 const tok={student:sessionStorage.st||'',parent:sessionStorage.pt||'',teacher:''};
 let S=null,T=null,lastCodes='',BASE='';
-const ready=(async()=>{const c=[location.origin==='null'?null:'',localStorage.apiBase||null,'http://localhost:3000','http://127.0.0.1:3000'].filter(x=>x!==null);for(const b of c){try{const r=await fetch(b+'/api/public',{cache:'no-store'}),j=await r.json();if(j&&j.name){BASE=b;return true}}catch(e){}}
+const API_URL = "https://mr-mohamed-edu.vercel.app";
+const ready=(async()=>{const c=[API_URL,localStorage.apiBase||null,'http://localhost:3000','http://127.0.0.1:3000'].filter((x,i,a)=>x!==null&&a.indexOf(x)===i);for(const b of c){try{const r=await fetch(b+'/api/public',{cache:'no-store'}),j=await r.json();if(j&&j.name){BASE=b;return true}}catch(e){}}
  const bn=$('banner');bn.style.display='block';bn.innerHTML='⚠️ الصفحة غير متصلة بالخادم. شغّل <b dir="ltr">node server.js</b> من مجلد المشروع ثم افتح <b dir="ltr">http://localhost:3000</b> (لا تفتح index.html مباشرة ولا بـ Live Server).';return false})();
 async function api(role,url,body,method){
  await ready;let r;try{r=await fetch(BASE+url,{method:method||(body===undefined?'GET':'POST'),headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok[role]},body:body===undefined?undefined:JSON.stringify(body)})}catch(e){throw new Error('تعذر الاتصال بالخادم. تأكد أنه يعمل: node server.js')}
@@ -221,4 +225,8 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]
 document.addEventListener('change',e=>{if(e.target.id!=='cf')return;const f=e.target.files[0];if(!f)return;$('cfname').textContent='تم اختيار: '+f.name+' ('+(f.size/1048576).toFixed(1)+'MB)';const fm=e.target.closest('form'),t=fm.querySelector('[name=type]');
  if(f.type.startsWith('video/'))t.value='video';else if(f.type.startsWith('image/'))t.value='image';else if(['video','image'].includes(t.value))t.value='note';const ti=fm.querySelector('[name=title]');if(!ti.value.trim())ti.value=f.name.replace(/\.[^.]+$/,'')});
 ready.then(ok=>{if(ok&&tok.student)loadStudent();if(ok&&tok.parent)loadParent()});
+let installPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
+$('install-app').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;return}alert(/iphone|ipad|ipod/i.test(navigator.userAgent)?'لتثبيت المنصة: اضغط مشاركة ثم "إضافة إلى الشاشة الرئيسية".':'لتثبيت المنصة: افتح قائمة المتصفح ثم اختر "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".')};
+if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('/sw.js').catch(()=>{});
 </script></body></html>
