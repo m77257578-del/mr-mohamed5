@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<meta name="theme-color" content="#102a43"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="منصة الأستاذ">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="app-icon-192.png" type="image/png"><link rel="apple-touch-icon" href="app-icon-192.png">
+<title>منصة الأستاذ محمد عبد المقصود</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Cairo,sans-serif;color:#102a43;background:linear-gradient(#f7f2e8,#eef5f4);min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.6;cursor:not-allowed}
+.view{display:none}.view.on{display:block}
+.tab{background:#fff;color:#146c94;font-weight:700;border-bottom:3px solid transparent}.tab.on{border-bottom-color:#e9a23b}
+.panel{background:#fff;border:1px solid #dbe7ea;border-radius:1.25rem;padding:1.25rem;box-shadow:0 7px 20px rgba(16,42,67,.05)}
+.card{background:#fff;border:1px solid #dbe7ea;border-radius:1rem;padding:1rem}
+.h2{font-size:22px;font-weight:800;margin-bottom:.5rem}.lbl{display:block;font-weight:700;margin-bottom:.25rem}
+.input{width:100%;border:1px solid #cbd5e1;border-radius:.8rem;padding:.7rem .9rem;background:#fff}
+.btn{border-radius:.75rem;padding:.6rem .9rem;font-weight:700}.sm{border-radius:.6rem;padding:.38rem .7rem;font-weight:700;font-size:.82rem}
+#install-app,#theme-toggle{padding:.3rem .6rem;font-size:.72rem;gap:.3rem!important;border-radius:.6rem}
+.pri{background:#146c94;color:#fff}.gold{background:#e9a23b;color:#fff}.red{background:#fee2e2;color:#b91c1c}.gray{background:#f1f5f9}.grn{background:#d1fae5;color:#065f46}
+.muted{color:#627d98}.msg{display:none;border-radius:.75rem;padding:.6rem 1rem;font-weight:700;font-size:.9rem;margin-top:.5rem}.msg.show{display:block}.msg.ok{background:#d1fae5;color:#065f46}.msg.no{background:#fee2e2;color:#b91c1c}
+#wa{position:fixed;bottom:18px;left:18px;width:60px;height:60px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.3);z-index:50}
+
+body[data-theme="dark"]{color:#e7f0f5;background:linear-gradient(#101c29,#172c35)}
+body[data-theme="dark"] .view>div,body[data-theme="dark"] .bg-white{background-color:#142430!important;color:#e7f0f5}
+body[data-theme="dark"] .panel,body[data-theme="dark"] .card{background:#1b2d3a!important;border-color:#3b5261;box-shadow:none;color:#e7f0f5}
+body[data-theme="dark"] .input,body[data-theme="dark"] input,body[data-theme="dark"] textarea,body[data-theme="dark"] select{background:#10212c;color:#e7f0f5;border-color:#496170}
+body[data-theme="dark"] .tab{background:#1b2d3a;color:#d6e8ef}
+body[data-theme="dark"] .muted,body[data-theme="dark"] .text-slate-400,body[data-theme="dark"] .text-slate-500{color:#afc1cc}
+body[data-theme="dark"] .bg-slate-50,body[data-theme="dark"] .bg-slate-100{background-color:#233844!important}
+
+#banner{position:sticky;top:0;z-index:200;background:#b91c1c;color:#fff;padding:10px 16px;text-align:center;font-weight:700;display:none}
+</style>
+</head>
+<body>
+<div id="banner"></div>
+<header class="px-4 pt-5 sm:px-8"><div class="mx-auto max-w-6xl rounded-[2rem] px-6 py-8 shadow-xl sm:px-10" style="background:linear-gradient(135deg,#102a43,#146c94)">
+ <div class="grid items-center gap-7 lg:grid-cols-[1.25fr_.75fr]"><section>
+  <p class="mb-3 font-bold" style="color:#f7bb5a">منصة تعليمية متكاملة من رابعة ابتدائي حتى ثالثة ثانوي</p>
+  <h1 id="pname" class="mb-3 text-3xl font-extrabold text-white">منصة الأستاذ محمد عبد المقصود</h1>
+  <p class="max-w-2xl leading-8" style="color:#dcecf2">فيديوهات ومذكرات وواجبات وامتحانات إلكترونية، مع متابعة مخصصة للطالب وولي الأمر.</p>
+  <div class="mt-4 flex flex-wrap gap-2"><button id="install-app" class="btn gold inline-flex items-center gap-2" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>تثبيت التطبيق</button><button id="theme-toggle" class="btn inline-flex items-center gap-2" style="background:#fff;color:#102a43" type="button" aria-pressed="false"><svg aria-hidden="true" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.5 14.1A8.6 8.6 0 0 1 9.9 3.5 8.7 8.7 0 1 0 20.5 14.1Z"/></svg><span>الوضع الداكن</span></button></div></section>
+  <img id="hero" class="mx-auto aspect-[4/3] w-full max-w-sm rounded-[1.5rem] object-cover" style="box-shadow:14px 14px 0 rgba(233,162,59,.7)" alt="" src="https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=1280"></div></div></header>
+
+<nav class="mx-auto mt-5 grid max-w-6xl grid-cols-2 gap-2 px-4 sm:px-8"><button class="tab on rounded-t-xl py-3" data-tab="student">مساحة الطالب</button><button class="tab rounded-t-xl py-3" data-tab="parent">مساحة ولي الأمر</button></nav>
+
+<main class="mx-auto max-w-6xl px-4 pb-12 sm:px-8">
+<section id="v-student" class="view on"><div class="rounded-b-[1.5rem] bg-white p-5 sm:p-8">
+ <div id="s-auth"><section class="panel mb-6" style="background:#fffaf1"><h2 class="h2">الكورسات المتاحة</h2><p class="muted">سجّل أو ادخل أولاً، ثم اطلب كود الكورس عبر واتساب وفعّله من حساب الطالب.</p><div id="course-list" class="mt-4 grid gap-3 md:grid-cols-2"></div></section><div data-auth-options class="grid gap-6 lg:grid-cols-2">
+  <section class="panel" style="background:#f4fafb"><h2 class="h2">دخول الطالب</h2><p class="muted">استخدم كود الطالب للوصول إلى صفك ومحتواك.</p>
+   <form data-form="slogin" class="mt-4 space-y-3"><label class="lbl">كود الطالب</label><input name="code" class="input" dir="ltr" placeholder="ST-ABC123" autocomplete="off"><button class="btn pri w-full">دخول</button><p class="msg"></p></form></section>
+  <section class="panel" style="background:#fffaf1"><h2 class="h2">تسجيل طالب جديد</h2>
+   <form data-form="register" class="mt-4 grid gap-3 sm:grid-cols-2">
+    <div><label class="lbl">اسم الطالب بالكامل</label><input name="name" class="input" required></div>
+    <div><label class="lbl">رقم هاتف الطالب</label><input name="phone" class="input" inputmode="tel" required></div>
+    <div><label class="lbl">الصف الدراسي</label><select name="grade" class="input" data-grades></select></div>
+    <div><label class="lbl">المحافظة</label><input name="governorate" class="input" required></div>
+    <div><label class="lbl">المركز</label><input name="center" class="input" required></div>
+    <div><label class="lbl">اسم ولي الأمر</label><input name="parentName" class="input" required></div>
+    <div><label class="lbl">رقم هاتف ولي الأمر</label><input name="parentPhone" class="input" inputmode="tel" required></div>
+    <button class="btn pri sm:col-span-2">تسجيل وإنشاء الأكواد</button><p class="msg sm:col-span-2"></p></form>
+   <div id="newcodes" class="mt-4 hidden rounded-xl border border-[#e9a23b] bg-[#fff8eb] p-4 font-bold"></div>
+   <button data-act="adminlink" class="mt-6 block text-xs text-slate-400 underline">دخول المعلم</button></section></div>
+  <section class="panel mx-auto mt-6 max-w-3xl" style="background:#fffaf1"><p class="font-bold" style="color:#e09a30">نبذة عن الأستاذ</p><h2 class="h2">الأستاذ محمد عبد المقصود</h2>
+   <p class="leading-8 muted">مدرس لغة عربية، خريج كلية دار العلوم، ومعلم خبير. أقدّم شرحاً مبسطاً ومتابعة مستمرة للطلاب من المرحلة الابتدائية حتى الثانوية.</p></section></div>
+ <div id="s-dash" class="hidden space-y-6"></div></div></section>
+
+<section id="v-parent" class="view"><div class="rounded-b-[1.5rem] bg-white p-5 sm:p-8">
+ <section id="p-auth" class="panel mx-auto max-w-xl" style="background:#f4fafb"><h2 class="h2">متابعة مستوى الطالب</h2>
+  <form data-form="plogin" class="mt-4 space-y-3"><label class="lbl">كود ولي الأمر</label><input name="code" class="input" dir="ltr" placeholder="PR-ABC123"><button class="btn gold w-full">فتح مساحة المتابعة</button><p class="msg"></p></form></section>
+ <div id="p-dash" class="hidden space-y-6"></div></div></section>
+
+<section id="v-teacher" class="view"><div class="rounded-b-[1.5rem] bg-white p-5 sm:p-8">
+ <section id="t-auth" class="panel mx-auto max-w-xl" style="background:#f4fafb"><h2 class="h2">دخول الأستاذ</h2>
+  <form data-form="tlogin" class="mt-4 space-y-3"><label class="lbl">كود الأستاذ</label><input name="code" type="password" class="input" autocomplete="off"><button class="btn pri w-full">فتح لوحة التحكم</button><p class="msg"></p></form>
+  <button data-act="back" class="mt-4 text-sm text-slate-500 underline">رجوع</button></section>
+ <div id="t-dash" class="hidden space-y-6"></div></div></section>
+</main>
+
+<a id="wa" target="_blank" rel="noopener noreferrer" aria-label="واتساب"><svg viewBox="0 0 24 24" width="30" height="30" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+<footer class="px-4 pb-7 text-center muted">منصة تعليمية متكاملة • الطالب • ولي الأمر</footer>
+
+<script>
+const $=id=>document.getElementById(id),WA='201003694398';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const GR=["الصف الرابع الابتدائي","الصف الخامس الابتدائي","الصف السادس الابتدائي","الصف الأول الإعدادي","الصف الثاني الإعدادي","الصف الثالث الإعدادي","الصف الأول الثانوي – عام","الصف الأول الثانوي – بكالوريا","الصف الثاني الثانوي – عام","الصف الثاني الثانوي – بكالوريا","الصف الثالث الثانوي – عام","الصف الثالث الثانوي – بكالوريا"];
+const gOpts=all=>GR.concat(all?['كل الصفوف']:[]).map(g=>`<option>${g}</option>`).join('');
+const waL=m=>'https://wa.me/'+WA+'?text='+encodeURIComponent(m);
+$('wa').href=waL('السلام عليكم يا أستاذ محمد، عندي استفسار عن المنصة.');
+let ONLINE_PAY=false;const tok={student:sessionStorage.st||'',parent:sessionStorage.pt||'',teacher:''};
+let S=null,T=null,lastCodes='',lastCodesMessage='',BASE='';
+const API_URL = location.protocol==='file:' ? 'http://localhost:3000' : location.hostname.endsWith('github.io') ? "https://mr-mohamed5.vercel.app" : location.origin;
+const ready=(async()=>{try{const r=await fetch(API_URL+'/api/public',{cache:'no-store'}),j=await r.json();if(r.ok&&j&&j.name){BASE=API_URL;return true}}catch(e){}
+ const bn=$('banner');bn.style.display='block';bn.textContent=API_URL.includes('localhost')?'⚠️ خادم المنصة المحلي غير متصل. شغّل node server.js وافتح http://localhost:3000.':'⚠️ تعذر الاتصال بخادم المنصة على '+API_URL+'؛ تأكد من نشر API على هذا النطاق.';return false})();
+async function api(role,url,body,method){
+ if(!await ready)throw new Error('خادم المنصة غير متاح على رابط النشر.');let r;try{r=await fetch(BASE+url,{method:method||(body===undefined?'GET':'POST'),headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok[role]},body:body===undefined?undefined:JSON.stringify(body)})}catch(e){throw new Error('تعذر الاتصال بخادم المنصة على الرابط الجديد.')}
+ let j=null;try{j=await r.json()}catch(e){}if(j===null)throw new Error('الخادم لا يرد ببيانات المنصة على الرابط الجديد.');if(!r.ok)throw Object.assign(new Error(j.error||'حدث خطأ'),{status:r.status});return j}
+function say(el,t,ok){let m=el.querySelector?el.querySelector('.msg'):el;if(!m)return;m.textContent=t;m.className='msg show '+(ok?'ok':'no')}
+const fmtD=d=>new Date(d).toLocaleDateString('ar-EG'),left=d=>Math.ceil((new Date(d)-new Date())/864e5);
+document.querySelectorAll('[data-grades]').forEach(s=>s.innerHTML=gOpts());
+function tabs(n){['student','parent','teacher'].forEach(x=>{$('v-'+x).classList.toggle('on',x===n)});document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===n));if(n!=='teacher'){tok.teacher='';T=null;$('t-dash').classList.add('hidden');$('t-auth').classList.remove('hidden')}}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>tabs(b.dataset.tab));
+ready.then(async ok=>{if(!ok)return;const p=await (await fetch(BASE+'/api/public')).json();ONLINE_PAY=!!p.onlinePay;$('pname').textContent=p.name;document.title=p.name;if(p.hero)$('hero').src=BASE+p.hero;$('course-list').innerHTML=p.courses?.length?p.courses.map(c=>courseCard(c)).join(''):emp('لا توجد كورسات منشورة حالياً.');if(new URLSearchParams(location.search).get('paid')){const bn=$('banner');bn.style.display='block';bn.textContent='جاري تأكيد الدفع... سيظهر الكورس في حسابك خلال لحظات، حدّث الصفحة بعد دقيقة لو تأخر.';setTimeout(()=>{bn.style.display='none';try{loadStudent()}catch(e){}},8000)}if(p.payments&&p.payments.length)$('course-list').insertAdjacentHTML('afterend',`<section class="panel mt-6"><h2 class="h2">طرق الدفع</h2><div class="mt-3 grid gap-3 sm:grid-cols-2">${p.payments.map(x=>`<div class="card"><h3 class="font-extrabold">${esc(x.title)}</h3><p class="text-sm muted">${esc(x.details||'')}</p></div>`).join('')}</div><p class="mt-3 text-sm muted">بعد التحويل أرسل إيصال الدفع للأستاذ عبر واتساب لتستلم كود التفعيل.</p></section>`)});
+
+// ---------- عارض الملفات ----------
+function fileUrl(c,role){return BASE+'/files/'+c.fileId+'?t='+tok[role]}
+function safeHttpUrl(value){try{const url=new URL(value);return ['http:','https:'].includes(url.protocol)?url.href:''}catch(e){return ''}}
+function youtubeEmbedUrl(value){try{const url=new URL(value),host=url.hostname.toLowerCase().replace(/^www\./,'');let id='';if(host==='youtu.be')id=url.pathname.split('/').filter(Boolean)[0]||'';else if(['youtube.com','m.youtube.com','youtube-nocookie.com'].includes(host)){id=url.searchParams.get('v')||url.pathname.match(/^\/(?:embed|live|shorts)\/([^/?]+)/)?.[1]||''}if(!/^[\w-]{11}$/.test(id))return '';return 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&playsinline=1&rel=0'}catch(e){return ''}}
+function openFile(c,role){
+ const external=!!c.link,original=external?safeHttpUrl(c.link):'',youtube=external?youtubeEmbedUrl(original):'',directVideo=external&&/\.(?:mp4|webm|ogg|m3u8)(?:$|[?#])/i.test(original),directImage=external&&/\.(?:png|jpe?g|gif|webp)(?:$|[?#])/i.test(original),directPdf=external&&/\.pdf(?:$|[?#])/i.test(original),u=external?(youtube||original):fileUrl(c,role),m=c.mime||'';if(external&&!original)return alert('الرابط غير صالح. استخدم رابطاً يبدأ بـ https://');let el='';
+ const videoControls=role==='student'?'controlslist="nodownload noplaybackrate" disablepictureinpicture oncontextmenu="return false"':'';
+ const watermark = role==='student' ? `<div style="position:absolute;inset:auto 16px 14px auto;pointer-events:none;color:rgba(255,255,255,.8);font-size:15px;font-weight:800;letter-spacing:.08em;text-shadow:0 2px 8px rgba(0,0,0,.7);background:rgba(0,0,0,.18);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.25)">${esc(S?.profile?.name || 'الطالب')} · ${esc(S?.profile?.phone || '***')}</div>` : '';
+ if(youtube)el=`<div style="position:relative;display:block;width:min(100%,1100px);margin:auto"><iframe src="${esc(youtube)}" title="${esc(c.title||'محتوى المنصة')}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="origin" style="width:100%;height:min(72vh,620px);border:0;border-radius:12px;background:#000"></iframe>${watermark}</div>`;
+ else if(directVideo||m.startsWith('video/'))el=`<div style="position:relative;display:inline-block;max-width:100%;"><video src="${esc(u)}" controls autoplay playsinline ${videoControls} style="max-width:100%;max-height:80vh;border-radius:12px;background:#000"></video>${watermark}</div>`;
+ else if(directImage||m.startsWith('image/'))el=`<img src="${esc(u)}" alt="${esc(c.title||'صورة')}" style="max-width:100%;max-height:80vh;border-radius:12px">`;
+ else if(directPdf||m==='application/pdf')el=`<iframe src="${esc(u)}" title="${esc(c.title||'ملف PDF')}" referrerpolicy="origin" style="width:100%;height:80vh;border:0;border-radius:12px;background:#fff"></iframe>`;
+ else if(external)el=`<iframe src="${esc(u)}" title="${esc(c.title||'محتوى المنصة')}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="origin" style="width:min(100%,1100px);height:min(72vh,620px);border:0;border-radius:12px;background:#000"></iframe>`;
+ else el=`<p class="font-bold text-white">لا يمكن عرض هذا النوع هنا، استخدم زر التنزيل.</p>`;
+ const o=document.createElement('div');o.id='viewer';o.style.cssText='position:fixed;inset:0;background:rgba(16,42,67,.9);z-index:100;display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;overflow:auto';
+ const download=external||(role==='student'&&m.startsWith('video/'))?'':`<a class="btn gold" href="${u}" download="${esc(c.fileName||'file')}">تنزيل</a>`;
+ const fallback=external&&role!=='student'?`<a class="btn gray" href="${esc(original)}" target="_blank" rel="noopener noreferrer">فتح الرابط الأصلي</a>`:'';
+ o.innerHTML=`<div class="flex flex-wrap justify-center gap-2"><button class="btn" style="background:#fff;color:#102a43" id="vclose">إغلاق</button>${download}${fallback}</div>${el}`;
+ document.body.append(o);$('vclose').onclick=()=>o.remove()}
+const ICON={video:'🎬',image:'🖼️',note:'📄',homework:'📝'};
+function cCard(c,role,extra=''){return `<div class="card"><h3 class="font-extrabold">${ICON[c.type]||'📎'} ${esc(c.title)}</h3><p class="mt-1 text-sm muted">${esc(c.grade)}${c.fileName?' • '+esc(c.fileName):''}</p><button data-act="open" data-id="${c.id}" data-role="${role}" class="btn pri sm mt-3">${c.type==='video'?'تشغيل':c.type==='image'?'عرض':'فتح'}</button> ${extra}</div>`}
+document.addEventListener('play',e=>{const v=e.target;if(v&&v.dataset&&v.dataset.cid&&!v.dataset.sent){v.dataset.sent=1;api('student','/api/student/activity',{contentId:v.dataset.cid}).catch(()=>{})}},true);
+document.addEventListener('click',async e=>{
+ const pr=e.target.closest('[data-pr]');
+ if(pr){const box=document.getElementById('rv-'+pr.dataset.pr),out=document.getElementById('pr-'+pr.dataset.pr),L=['أ','ب','ج','د'];
+  const qs=(box._wrong||[]).filter(x=>x.options&&x.options.length);
+  out.innerHTML=qs.length?qs.map((x,i)=>`<div class="card mt-2" data-k="${esc(x.correct)}"><b>${esc(x.q)}</b>${x.options.map((o,j)=>`<button type="button" class="btn gray sm mt-1 w-full" data-pa="${L[j]}">${L[j]}) ${esc(o)}</button>`).join('')}<p class="mt-1 text-sm"></p></div>`).join(''):'<p class="mt-2 text-sm muted">أخطاؤك مقالية — راجع نموذج الإجابة أعلاه.</p>';
+  pr.remove();return}
+const pa=e.target.closest('[data-pa]');
+ if(pa){const c=pa.closest('[data-k]'),ok=pa.dataset.pa===c.dataset.k;c.querySelector('p').textContent=ok?'إجابة صحيحة ✅':'غير صحيحة، الصحيحة: '+c.dataset.k;c.querySelectorAll('[data-pa]').forEach(x=>x.disabled=true);return}
+ const b=e.target.closest('[data-rv]');if(!b)return;
+ const box=document.getElementById('rv-'+b.dataset.rv);
+ if(box.dataset.open){box.innerHTML='';box.dataset.open='';return}
+ try{const d=await api('student','/api/student/review',{resultId:b.dataset.rv});box.dataset.open=1;
+  const wrong=d.items.filter(x=>x.ok===false);box._wrong=wrong;
+  box.innerHTML=d.items.map((x,i)=>`<div class="mt-2 rounded-lg p-2 text-sm" style="background:${x.ok===false?'#fdecec':x.ok?'#eaf7ee':'#f4f6f8'};color:#102a43"><b>${i+1}. ${esc(x.q)}</b><br>إجابتك: ${esc(x.mine)}${x.correct?'<br>الصحيحة: '+esc(x.correct):''}${x.model?'<br>نموذج الإجابة: '+esc(x.model):''}</div>`).join('')+(d.model?`<div class="mt-2 text-sm"><b>نموذج الإجابة:</b><br>${esc(d.model)}</div>`:'')+(wrong.length?`<button type="button" class="btn gold sm mt-2" data-pr="${b.dataset.rv}">تدرّب على أخطائي</button><div id="pr-${b.dataset.rv}"></div>`:'')}
+ catch(err){box.textContent=err.message||'تعذر التحميل'}
+});
+document.addEventListener('click',e=>{const sy=e.target.closest('[data-say]');if(sy){const t=document.querySelector('[data-assistant-answer]');if(!window.speechSynthesis||!t)return;if(speechSynthesis.speaking){speechSynthesis.cancel();sy.textContent='اسمع الإجابة';return}const u=new SpeechSynthesisUtterance(t.textContent);u.lang='ar-EG';u.onend=()=>{sy.textContent='اسمع الإجابة'};sy.textContent='إيقاف القراءة';speechSynthesis.speak(u);return}if(e.target.closest('[data-act="exam"]')&&window.speechSynthesis)speechSynthesis.cancel()},true);
+function qBlockHtml(){const O=['أ','ب','ج','د'];return `<div class="card" data-qb><div class="flex gap-2"><select class="input" data-k><option value="mcq">سؤال اختياري</option><option value="essay">سؤال مقالي</option></select><button type="button" class="btn gray sm" data-qdel>حذف</button></div><textarea class="input mt-2" data-q placeholder="نص السؤال" style="min-height:60px"></textarea><div data-mcq class="mt-2 grid gap-2 sm:grid-cols-2">${O.map(x=>`<input class="input" data-o placeholder="الاختيار ${x}">`).join('')}<select class="input" data-ans>${O.map(x=>`<option value="${x}">الإجابة الصحيحة: ${x}</option>`).join('')}</select></div><textarea class="input mt-2" data-m placeholder="نموذج الإجابة (يصحح الذكاء الاصطناعي بناءً عليه)" style="min-height:60px;display:none"></textarea></div>`}
+function kindOf(e,i){return (e.kinds&&e.kinds[i])||(e.type==='اختياري'?'mcq':'essay')}
+document.addEventListener('click',e=>{if(e.target.closest('#addq')){document.getElementById('qb').insertAdjacentHTML('beforeend',qBlockHtml());return}const d=e.target.closest('[data-qdel]');if(d){const qb=d.closest('#qb');if(qb&&qb.children.length>1)d.closest('[data-qb]').remove()}});
+document.addEventListener('change',e=>{const k=e.target.closest('[data-k]');if(!k)return;const c=k.closest('[data-qb]'),m=k.value==='mcq';c.querySelector('[data-mcq]').style.display=m?'':'none';c.querySelector('[data-m]').style.display=m?'none':''});
+function courseMedia(items=[]){return items.map(item=>{if(!item.url)return '';const rawUrl=item.fileId?BASE+'/files/'+encodeURIComponent(item.fileId)+'?t='+encodeURIComponent(tok.student):item.url.startsWith('/')?BASE+item.url:item.url,url=esc(rawUrl),title=esc(item.title||item.fileName||'محتوى الكورس');if(item.type==='image')return `<figure class="card"><img src="${url}" alt="${title}" loading="lazy" class="max-h-96 w-full rounded-lg object-contain"><figcaption class="mt-2 text-sm muted">${title}</figcaption></figure>`;if(item.type==='video'&&String(item.mime||'').startsWith('video/'))return `<div class="card"><p class="mb-2 font-bold">${title}</p><video data-cid="${esc(item.id)}" src="${url}" controls controlslist="nodownload noplaybackrate" disablepictureinpicture oncontextmenu="return false" playsinline preload="metadata" class="w-full rounded-lg"></video></div>`;return `<div class="card"><p class="font-bold">${title}${item.fileName?' • '+esc(item.fileName):''}</p><button type="button" data-act="open" data-id="${esc(item.id)}" data-role="student" class="btn pri sm mt-2">${item.type==='note'?'فتح المذكرة':'فتح المحتوى'}</button></div>`}).join('')}
+function courseCard(c,profile=null){const details=profile?`\nاسم الطالب: ${profile.name}\nكود الطالب: ${profile.code}\nالصف: ${profile.grade}`:'';const imageSrc = c.imageUrl || c.imageFileId ? (c.imageUrl || (BASE + '/files/' + encodeURIComponent(c.imageFileId))) : '';const message=`السلام عليكم، أريد الاشتراك في كورس ${c.title}.\nالسعر: ${c.price} جنيه\nالمدة: ${c.days} يوم\nالصف: ${c.grade}${details}\nمن فضلك أرسل كود التفعيل بعد تأكيد الدفع.`;const action=c.active?`<p class="mt-3 font-bold text-emerald-700">مشترك حتى ${fmtD(c.expiresAt)}</p>`:profile?`<a class="btn gold mt-3 inline-block text-white" target="_blank" rel="noopener noreferrer" href="${waL(message)}">اطلب كود التفعيل عبر واتساب</a>${ONLINE_PAY&&c.price>0?`<button class="btn pri mt-3" type="button" data-act="pay" data-id="${c.id}">ادفع إلكترونياً ${esc(c.price)} ج</button>`:''}`:`<button class="btn pri mt-3" type="button" data-act="courseLogin">سجّل أو ادخل لشراء الكورس</button>`;return `<article class="card overflow-hidden"><div class="mb-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">${imageSrc?`<img src="${esc(imageSrc)}" alt="${esc(c.title)}" class="h-40 w-full object-cover" loading="lazy">`:`<div class="flex h-40 items-center justify-center bg-gradient-to-br from-[#146c94] to-[#e9a23b] text-lg font-extrabold text-white">${esc(c.title.slice(0,1))}</div>`}</div><h3 class="font-extrabold">${esc(c.title)}</h3><p class="mt-1 text-sm muted">${esc(c.grade)} • ${Number(c.price).toLocaleString('ar-EG')} جنيه • ${c.days} يوم ${c.isFree? '• مجاني':''}</p>${c.description?`<p class="mt-2 text-sm leading-7">${esc(c.description)}</p>`:''}${courseMedia(c.content||[])}${action}</article>`}
+const emp=t=>`<p class="rounded-xl bg-slate-50 p-3 text-sm muted">${t}</p>`;
+
+// ---------- الطالب ----------
+async function loadStudent(){
+ try{S=await api('student','/api/student/me')}catch(e){if(e.status===401||e.status===403){tok.student='';sessionStorage.st='';$('s-dash').classList.add('hidden');$('s-auth').classList.remove('hidden')}return}
+ $('s-auth').classList.add('hidden');const d=$('s-dash');d.classList.remove('hidden');const p=S.profile,hasActiveCourse=(S.courses||[]).some(c=>c.active);
+ const sec=(t,id,h,bg)=>`<section class="panel" style="background:${bg||'#f4fafb'}"><h2 class="h2">${t}</h2><div class="mt-3 ${h||'grid gap-3 md:grid-cols-2'}">${id}</div></section>`;
+ const byT=t=>S.content.filter(c=>c.type===t).map(c=>cCard(c,'student')).join('')||emp(p.sub||hasActiveCourse?'لا يوجد محتوى متاح حالياً.':'المحتوى مقفل — فعّل كود اشتراك أو كورس.');
+ d.innerHTML=`<div class="panel text-white" style="background:#102a43"><p class="font-bold">أهلاً بك في مساحتك التعليمية</p><h2 class="mt-1 text-2xl font-extrabold">${esc(p.name)}</h2><p class="mt-1 text-sm text-slate-200">${esc(p.grade)} • كودك: <span dir="ltr">${esc(p.code)}</span></p><button data-act="slogout" class="btn sm mt-3" style="background:#fff;color:#102a43">تسجيل الخروج</button></div>
+ ${S.courses?.length?`<section class="panel" style="background:#fffaf1"><h2 class="h2">كورسات صفك</h2><div class="mt-3 grid gap-3 md:grid-cols-2">${S.courses.map(c=>courseCard(c,p)).join('')}</div></section>`:''}
+ <section class="panel" style="background:#fff8eb"><h2 class="h2">الاشتراك وأكواد التفعيل</h2><p class="font-bold" style="color:${p.sub||hasActiveCourse?'#047857':'#b91c1c'}">${p.sub?'✅ اشتراكك العام مفعّل — متبقي '+left(p.subEnd)+' يوم':hasActiveCourse?'✅ لديك كورس مفعّل. راجع تاريخ انتهاء كل كورس بالأعلى.':'🔒 فعّل كود اشتراك أو كورس للوصول إلى المحتوى.'}</p>
+  <form data-form="redeem" class="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]"><input name="code" class="input" dir="ltr" placeholder="XXXX-XXXX-XXXX" autocomplete="off"><button class="btn pri">تفعيل الكود</button><p class="msg sm:col-span-2"></p></form>
+  <a target="_blank" rel="noopener noreferrer" class="btn mt-3 inline-block text-white" style="background:#25D366" href="${waL('السلام عليكم يا أستاذ، عايز أشتري كود تفعيل للمنصة.\nالاسم: '+p.name+'\nكود الطالب: '+p.code+'\nالصف: '+p.grade)}">اشترِ كود التفعيل عبر واتساب</a></section>`
+ +sec('الإعلانات ومواعيد الدروس',S.notices.map(n=>`<div class="card"><h3 class="font-extrabold">${n.kind==='schedule'?'موعد درس':'إعلان'}</h3><p class="mt-1 text-sm muted">${esc(n.text)}</p></div>`).join('')||emp('لا توجد إعلانات جديدة.'),'','#fffaf1')
+ +`<div class="grid gap-6 lg:grid-cols-2">`+sec('🎬 الفيديوهات',byT('video'),'space-y-3')+sec('📄 المذكرات والملفات',byT('note'),'space-y-3','#fffaf1')+sec('📝 الواجبات',byT('homework'),'space-y-3','#fffaf1')+sec('🖼️ الصور',byT('image'),'space-y-3')+`</div>`
+ +sec('الملاحظات الذكية',`<form data-form="notes" class="mt-3 space-y-3"><textarea name="text" class="input" style="min-height:90px" placeholder="اكتب ملاحظاتك عن الدرس أو الواجب"></textarea><button class="btn pri w-full">حفظ الملاحظة</button><p class="msg"></p></form><div class="mt-3 space-y-3">${(S.notes||[]).map(n=>`<div class="card"><p class="text-sm">${esc(n.text)}</p><p class="mt-1 text-xs muted">${new Date(n.created).toLocaleDateString('ar-EG')}</p></div>`).join('')||emp('لا توجد ملاحظات محفوظة حتى الآن.')}</div>`,'','#fffaf1')
+ +sec('المساعد الذكي',`<form data-form="assistant" class="mt-3 space-y-3"><textarea name="question" class="input" style="min-height:90px" placeholder="اكتب سؤالاً أو طلباً عن المنصة أو المحتوى"></textarea><button class="btn gold w-full">اسأل المساعد</button><p class="msg"></p><div class="card mt-2"><p class="text-sm font-bold">الإجابة:</p><p class="mt-1 text-sm muted" data-assistant-answer>سيظهر الرد هنا.</p><button type="button" class="btn gray sm mt-2" data-say="1">اسمع الإجابة</button></div></form>`,'','#fffaf1')
+ +sec('الامتحانات المتاحة',S.exams.map(e=>`<div class="card"><h3 class="font-extrabold">${esc(e.title)}</h3><p class="mt-1 text-sm muted">${esc(e.type)} • ${esc(e.grade)} • ${e.questions.length} سؤال</p><button data-act="exam" data-id="${e.id}" class="btn pri sm mt-3" ${e.taken?'disabled':''}>${e.taken?'تم الإرسال':'ابدأ الامتحان'}</button></div>`).join('')||emp(p.sub?'لا توجد امتحانات متاحة.':'الامتحانات مقفلة — فعّل اشتراكك بكود.'),'','#fffaf1')
+ +`<div class="grid gap-6 lg:grid-cols-2">`+sec('نتائجي وتظلماتي',S.results.map(r=>`<div class="card"><h3 class="font-extrabold">${esc(r.examTitle)}</h3><p class="mt-1 text-sm muted">النتيجة: ${r.score??'بانتظار التصحيح'} / ${r.total}${r.label?' — '+r.label:''}</p>${r.appeal?`<p class="mt-2 text-sm font-bold">التظلم: ${r.appeal.status==='reviewed'?'تمت المراجعة'+(r.appeal.score?' — الدرجة: '+esc(r.appeal.score):''):'بانتظار المراجعة'}</p>`:r.status==='graded'?`<form data-form="appeal" data-id="${r.id}" class="mt-2"><textarea name="reason" class="input" placeholder="سبب التظلم"></textarea><button class="btn gold sm mt-2">إرسال تظلم</button><p class="msg"></p></form>`:''}${r.status==='graded'?`<button type="button" class="btn gray sm mt-2" data-rv="${r.id}">راجع إجاباتي</button><div id="rv-${r.id}"></div>`:''}</div>`).join('')||emp('لا توجد نتائج حتى الآن.'),'space-y-3')
+ +`<section class="panel" style="background:#fffaf1"><h2 class="h2">راسل الأستاذ</h2><form data-form="message" class="space-y-3"><textarea name="text" class="input" style="min-height:100px" placeholder="رسالتك أو استفسارك"></textarea><button class="btn pri w-full">إرسال</button><p class="msg"></p></form><div class="mt-3 space-y-3">${S.messages.map(m=>`<div class="card"><p class="text-sm">${esc(m.text)}</p><p class="mt-1 text-sm font-bold muted">${m.reply?'رد الأستاذ: '+esc(m.reply):'بانتظار الرد'}</p></div>`).join('')}</div></section></div>`}
+function examModal(e){
+ const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;background:rgba(16,42,67,.85);z-index:100;overflow:auto;padding:16px';
+ o.innerHTML=`<div class="panel mx-auto max-w-3xl"><div class="flex items-center justify-between gap-3"><h2 class="h2">${esc(e.title)}</h2><button class="btn gray" id="xclose">إغلاق</button></div><form data-form="exam" data-id="${e.id}" class="space-y-4">${(e.questions||[]).map((q,i)=>`<div class="card"><p class="font-bold">${i+1}. ${esc(typeof q==='string'?q:q.text||'')}</p>${kindOf(e,i)==='mcq'?`<div class="mt-2 grid gap-2 sm:grid-cols-2">${['أ','ب','ج','د'].map((x,j)=>`<label class="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2"><input type="radio" name="q${i}" value="${x}">${x}${(e.options&&e.options[i]&&e.options[i][j])?') '+esc(e.options[i][j]):''}</label>`).join('')}</div>`:`<textarea name="q${i}" class="input mt-2" style="min-height:80px"></textarea>`}</div>`).join('')}<button class="btn gold w-full">إرسال الإجابات</button><p class="msg"></p></form></div>`;
+ document.body.append(o);$('xclose').onclick=()=>o.remove()}
+
+// ---------- ولي الأمر ----------
+async function loadParent(){
+ try{var d=await api('parent','/api/parent/me')}catch(e){if(e.status===401||e.status===403){tok.parent='';sessionStorage.pt=''}return}
+ $('p-auth').classList.add('hidden');const el=$('p-dash');el.classList.remove('hidden');
+ el.innerHTML=`<section class="panel" style="background:#f4fafb"><h2 class="h2">بيانات الطالب</h2><div class="mt-3 grid gap-3 sm:grid-cols-4">${[['الطالب',d.name],['الصف',d.grade],['الحالة',d.status],['الاشتراك',d.sub?'مفعّل ('+left(d.subEnd)+' يوم)':'غير مفعّل']].map(x=>`<div class="card"><h3 class="font-extrabold">${x[0]}</h3><p class="text-sm muted">${esc(x[1])}</p></div>`).join('')}</div></section>
+ <section class="panel"><h2 class="h2">مستوى التقدم</h2><div class="mt-3 grid gap-3 sm:grid-cols-3">${[['فيديوهات شاهدها',d.progress.videosWatched+' من '+d.progress.videosTotal],['ملفات ومذكرات فتحها',d.progress.filesOpened+' من '+d.progress.filesTotal],['امتحانات حلّها',d.progress.examsDone+' من '+d.progress.examsTotal],['ملاحظات كتبها',d.progress.notes],['متوسط الدرجات',d.progress.average===null?'—':d.progress.average+'%'],['التقدير العام',d.progress.label||'—']].map(x=>`<div class="card"><h3 class="font-extrabold">${x[0]}</h3><p class="text-sm muted">${esc(x[1])}</p></div>`).join('')}</div>${d.progress.lastActive?`<p class="mt-3 text-sm muted">آخر نشاط: ${new Date(d.progress.lastActive).toLocaleString('ar-EG')}</p>`:''}</section>
+ <section class="panel" style="background:#fffaf1"><h2 class="h2">نتائج الامتحانات</h2><div class="mt-3 grid gap-3 md:grid-cols-2">${d.results.map(r=>`<div class="card"><h3 class="font-extrabold">${esc(r.examTitle)}</h3><p class="text-sm muted">النتيجة: ${r.score??'بانتظار التصحيح'} / ${r.total}${r.label?' — '+r.label:''}</p></div>`).join('')||emp('لا توجد نتائج حتى الآن.')}</div></section>
+ <button data-act="plogout" class="btn gray">تسجيل الخروج</button>`}
+
+// ---------- المعلم ----------
+async function loadTeacher(){
+ T=await api('teacher','/api/teacher/all');$('t-auth').classList.add('hidden');const d=$('t-dash');d.classList.remove('hidden');
+ const pend=T.results.filter(r=>r.status!=='graded').length,sec=(t,h,bg)=>`<section class="panel" style="background:${bg||'#f4fafb'}"><h2 class="h2">${t}</h2>${h}</section>`;
+ const lbl=(l,i)=>`<div><label class="lbl">${l}</label>${i}</div>`;
+ const act=(a,id,t,c,x='')=>`<button data-act="${a}" data-id="${id}" ${x} class="sm ${c}">${t}</button>`;
+ const courseOptions=`<option value="">اشتراك عام</option>${(T.courses||[]).filter(c=>c.status==='published').map(c=>`<option value="${c.id}" data-days="${c.days}">${esc(c.title)} • ${c.days} يوم</option>`).join('')}`;
+ d.innerHTML=
+ `<section class="panel" style="background:#f4fafb"><div class="flex flex-wrap items-center justify-between gap-3"><h2 class="h2">لوحة تحكم الأستاذ</h2><button data-act="tlogout" class="btn gray">تسجيل الخروج</button></div>
+  <p class="mt-1 text-sm font-bold" style="color:#047857">✅ متصل بالخادم — الملفات بلا حد للحجم (حسب مساحة التخزين)</p>
+  <div class="mt-3 grid gap-3 sm:grid-cols-4">${[['الطلاب',T.students.length],['أولياء الأمور',T.parents.length],['بانتظار التصحيح',pend],['رسائل بلا رد',T.messages.filter(m=>!m.reply).length]].map(x=>`<div class="card"><h3 class="font-extrabold">${x[0]}</h3><p class="text-2xl font-extrabold">${x[1]}</p></div>`).join('')}</div></section>
+ <div class="grid gap-6 lg:grid-cols-2">`
+ +sec('المدفوعات الإلكترونية',`<div class="mt-3 space-y-2">${(T.orders||[]).map(o=>`<div class="card"><h3 class="font-extrabold">${esc(o.student)} — ${esc(o.course)}</h3><p class="text-sm muted">${esc(o.amount)} ج • ${o.status==='paid'?'تم الدفع':o.status==='pending'?'بانتظار الدفع':'يحتاج مراجعة'} • ${new Date(o.paidAt||o.created).toLocaleString('ar-EG')}</p></div>`).join('')||emp('لا توجد مدفوعات حتى الآن.')}</div>`,'','#f4fafb')  +sec('إعدادات المنصة',`<form data-form="settings" class="mt-3 space-y-3">${lbl('اسم المنصة',`<input name="name" class="input" value="${esc(T.name)}">`)}${lbl('كلمة مرور الأستاذ الجديدة (12 حرفاً على الأقل)',`<input name="password" type="password" class="input" autocomplete="new-password">`)}${lbl('طرق الدفع (سطر لكل طريقة بالشكل: الاسم | التفاصيل — مثال: فودافون كاش | 01000000000)',`<textarea name="payments" class="input" style="min-height:90px">${esc((T.payments||[]).map(x=>x.title+(x.details?' | '+x.details:'')).join('\n'))}</textarea>`)}${lbl('تغيير صورة الغلاف (من جهازك)','<input name="hero" type="file" accept="image/*" class="input">')}<button class="btn gold w-full">حفظ الإعدادات</button><p class="msg"></p></form>`,'#fffaf1')
+ +sec('نشر كورس جديد',`<form data-form="course" class="mt-3 grid gap-3 sm:grid-cols-2">${lbl('اسم الكورس','<input name="title" class="input" required>')}${lbl('الصف الدراسي',`<select name="grade" class="input">${gOpts(1)}</select>`)}${lbl('السعر بالجنيه','<input name="price" class="input" type="number" min="0" step="0.01" required>')}${lbl('مدة الكورس بالأيام','<input name="days" class="input" type="number" min="1" max="3650" value="30" required>')}<div class="sm:col-span-2">${lbl('وصف مختصر','<textarea name="description" class="input" maxlength="1500"></textarea>')}</div><button class="btn gold sm:col-span-2">نشر الكورس</button><p class="msg sm:col-span-2"></p></form><div class="mt-3 grid gap-3 md:grid-cols-2">${(T.courses||[]).map(c=>`<div class="card"><h3 class="font-extrabold">${esc(c.title)}${c.status==='archived'?' (مؤرشف)':''}</h3><p class="mt-1 text-sm muted">${esc(c.grade)} • ${c.price} جنيه • ${c.days} يوم</p>${c.description?`<p class="mt-2 text-sm">${esc(c.description)}</p>`:''}${c.status==='published'?act('delcourse',c.id,'إيقاف البيع','red','data-confirm="1"'):''}</div>`).join('')||emp('لم تنشر كورسات بعد.')}</div>`,'#f4fafb')
+ +sec('نشر إعلان أو موعد درس',`<form data-form="notice" class="mt-3 space-y-3">${lbl('النوع','<select name="kind" class="input"><option value="announcement">إعلان</option><option value="schedule">موعد درس</option></select>')}${lbl('النص','<textarea name="text" class="input" style="min-height:80px"></textarea>')}${lbl('الصف المستهدف',`<select name="grade" class="input">${gOpts(1)}</select>`)}<button class="btn pri w-full">نشر</button><p class="msg"></p></form>`)
+ +`</div>`
+ +sec('أكواد التفعيل (الدفع عبر واتساب)',`<p class="muted">اختَر الكورس أو الاشتراك العام، وبعد استلام الدفع أرسل كود التفعيل للطالب عبر واتساب. كل كود يستخدم مرة واحدة.</p><form data-form="codes" class="mt-3 grid gap-3 md:grid-cols-4">${lbl('الكورس','<select name="courseId" data-code-course class="input">'+courseOptions+'</select>')}${lbl('عدد الأكواد (1–100)','<input name="count" type="number" min="1" max="100" value="1" class="input">')}${lbl('المدة بالأيام','<input name="days" type="number" min="1" max="3650" value="30" class="input">')}<button class="btn gold self-end">توليد الأكواد</button><p class="msg md:col-span-4"></p></form>
+  ${lastCodes?`<textarea id="codesout" class="input mt-3" dir="ltr" style="min-height:100px" readonly>${esc(lastCodes)}</textarea><div class="mt-2 flex gap-2"><button data-act="copycodes" class="btn pri sm">نسخ</button><a target="_blank" rel="noopener noreferrer" class="btn sm text-white" style="background:#25D366" href="https://wa.me/?text=${encodeURIComponent(lastCodesMessage)}">إرسال عبر واتساب</a></div>`:''}
+  <div class="mt-3 grid gap-3 md:grid-cols-3"><div class="card"><b>غير مستخدمة:</b> ${T.codes.filter(c=>c.status==='unused').length}</div><div class="card"><b>مستخدمة:</b> ${T.codes.filter(c=>c.status==='used').length}</div>${T.codes.slice(-30).reverse().map(c=>{const course=(T.courses||[]).find(x=>x.id===c.courseId);return `<div class="card text-sm">${course?esc(course.title)+' • ':''}كود ينتهي بـ <b dir="ltr">${esc(c.hint)}</b> • ${c.days} يوم • ${c.status==='unused'?'غير مستخدم':c.status==='used'?'مستخدم':'ملغي'}${c.status==='unused'?'<br>'+act('delcode',c.id,'حذف','red'):''}</div>`}).join('')}</div>`)
+ +sec('نشر فيديو أو صورة أو مذكرة أو واجب (بدون حد للحجم)',`<form data-form="content" class="mt-3 grid gap-3 md:grid-cols-2">
+   <div class="md:col-span-2"><span class="lbl">اضغط على نوع الملف لاختياره من جهازك</span><div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    ${[['video/*','video','🎬','فيديو'],['image/*','image','🖼️','صورة'],['application/pdf,.pdf','note','📄','PDF'],['','note','📎','أي ملف آخر']].map(x=>`<button type="button" data-act="pick" data-accept="${x[0]}" data-type="${x[1]}" class="card text-center font-bold"><span style="font-size:34px">${x[2]}</span><br>${x[3]}</button>`).join('')}</div>
+   <input id="cf" type="file" class="hidden"><p id="cfname" class="mt-2 text-sm font-bold" style="color:#146c94"></p></div>
+  ${lbl('نوع المحتوى','<select name="type" class="input"><option value="video">فيديو</option><option value="image">صورة</option><option value="note">مذكرة</option><option value="homework">واجب</option></select>')}${lbl('الكورس (اختياري)',`<select name="courseId" class="input">${courseOptions}</select>`)}${lbl('الصف المستهدف',`<select name="grade" class="input">${gOpts(1)}</select>`)}
+  ${lbl('العنوان','<input name="title" class="input">')}${lbl('رابط YouTube أو بث مباشر (اختياري)','<input name="link" type="url" dir="ltr" placeholder="https://www.youtube.com/live/..." class="input">')}
+   <div class="md:col-span-2"><div id="prog" class="hidden h-3 overflow-hidden rounded-full bg-slate-200"><div id="bar" class="h-3 bg-[#146c94]" style="width:0"></div></div><p id="proglbl" class="text-sm font-bold"></p></div>
+   <button class="btn pri md:col-span-2">نشر المحتوى</button><p class="msg md:col-span-2"></p></form>
+   <div class="mt-4 grid gap-3 md:grid-cols-3">${T.content.map(c=>cCard(c,'teacher',act('delcontent',c.id,'حذف','red','data-confirm="1"'))).join('')||emp('لا يوجد محتوى منشور.')}</div>`,'#fffaf1')
+ +sec('إنشاء امتحان إلكتروني',`<form data-form="exam-new" class="mt-3 grid gap-3 md:grid-cols-2">${lbl('العنوان','<input name="title" class="input" required>')}${lbl('الكورس (اختياري)',`<select name="courseId" class="input">${courseOptions}</select>`)}${lbl('الصف',`<select name="grade" class="input">${gOpts(1)}</select>`)}
+   <div class="md:col-span-2"><div id="qb" class="space-y-3">${qBlockHtml()}</div><button type="button" id="addq" class="btn gray mt-2">+ إضافة سؤال</button></div>
+   <button class="btn gold md:col-span-2">نشر الامتحان</button><p class="msg md:col-span-2"></p></form>
+   <div class="mt-3 flex flex-wrap gap-2">${T.exams.map(e=>`<span class="card text-sm">${esc(e.title)} (${e.questions.length}) ${act('delexam',e.id,'حذف','red')}</span>`).join('')}</div>`)
+ +`<div class="grid gap-6 lg:grid-cols-2">`
+ +sec('تصحيح إجابات الطلاب',`<div class="mt-3 space-y-3">${T.results.map(r=>`<div class="card"><h3 class="font-extrabold">${esc(r.examTitle)}</h3><p class="text-sm muted">${esc(r.studentName)} — ${r.status==='graded'?'تم التصحيح ('+r.score+'/'+r.total+')':'بانتظار التصحيح'}</p><p class="mt-1 whitespace-pre-wrap text-sm">${esc(r.answers.join(' | '))}</p>${r.status!=='graded'?`<input type="number" min="0" max="${r.total}" class="input mt-2" placeholder="الدرجة من ${r.total}">${act('grade',r.id,'حفظ التصحيح','gold','data-needinput="1"')}`:''}</div>`).join('')||emp('لا توجد إجابات مرسلة.')}</div>`,'#fffaf1')
+ +sec('رسائل الطلاب والردود',`<div class="mt-3 space-y-3">${T.messages.map(m=>`<div class="card"><h3 class="font-extrabold">${esc(m.name)}</h3><p class="text-sm">${esc(m.text)}</p><textarea class="input mt-2" placeholder="اكتب الرد">${esc(m.reply)}</textarea>${act('reply',m.id,'إرسال الرد','pri','data-needinput="1" data-allowempty="1"')}</div>`).join('')||emp('لا توجد رسائل.')}</div>`)
+ +`</div>`
+ +sec('التظلمات',`<div class="mt-3 grid gap-3 md:grid-cols-2">${T.appeals.map(a=>`<div class="card"><h3 class="font-extrabold">${esc(a.studentName)} — ${esc(a.examTitle)}</h3><p class="text-sm">${esc(a.reason)}</p><p class="text-sm font-bold muted">${a.status==='reviewed'?'تمت المراجعة':'بانتظار المراجعة'}</p><input class="input mt-2" placeholder="الدرجة بعد المراجعة (اختياري)" value="${esc(a.score)}">${act('appeal',a.id,'إنهاء المراجعة','gold','data-needinput="1" data-allowempty="1"')}</div>`).join('')||emp('لا توجد تظلمات.')}</div>`,'#fffaf1')
+ +sec('إدارة الحسابات والاشتراكات',`<div class="mt-3 grid gap-3 md:grid-cols-2">${T.students.map(s=>{const on=s.subEnd&&new Date(s.subEnd)>new Date();return `<div class="card"><h3 class="font-extrabold">${esc(s.name)}</h3><p class="text-sm muted">${esc(s.grade)} • <span dir="ltr">${esc(s.code)}</span> • ${s.status==='blocked'?'محجوب':'نشط'} • اشتراك: ${on?'حتى '+fmtD(s.subEnd):'غير مفعّل'}</p>
+   <div class="mt-2 rounded-lg bg-slate-50 p-2 text-sm muted">هاتف الطالب: ${esc(s.phone)}<br>هاتف ولي الأمر: ${esc(s.parentPhone)} (${esc(s.parentName)})<br>${esc(s.governorate)} • ${esc(s.center)} • ${esc(s.village)}</div>
+   <div class="mt-2 flex flex-wrap gap-2">${act('extend',s.id,on?'تمديد 30 يوم':'تفعيل 30 يوم','grn')}${act('block',s.id,s.status==='blocked'?'إعادة التفعيل':'حجب','red')}${act('supervisor',s.id,s.supervisor?'إلغاء الإشراف':'ترقية لمشرف','pri')}${act('delstudent',s.id,'حذف','red','data-confirm="1"')}</div></div>`}).join('')}
+   ${T.parents.map(p=>`<div class="card"><h3 class="font-extrabold">ولي الأمر: ${esc(p.name)}</h3><p class="text-sm muted"><span dir="ltr">${esc(p.code)}</span> • ${p.status==='blocked'?'محجوب':'نشط'}</p><div class="mt-2">${act('blockp',p.id,p.status==='blocked'?'إعادة التفعيل':'حجب ولي الأمر','red')}</div></div>`).join('')}</div>`)}
+
+// ---------- رفع الملفات مع شريط تقدم ----------
+async function upload(url,file,onp){if(!await ready)throw new Error('خادم المنصة غير متاح على رابط النشر.');const host=new URL(BASE).hostname,local=['localhost','127.0.0.1'].includes(host);
+ if(local)return new Promise((ok,no)=>{const x=new XMLHttpRequest();x.open('PUT',BASE+url+(url.includes('?')?'&':'?')+'name='+encodeURIComponent(file.name));x.setRequestHeader('Authorization','Bearer '+tok.teacher);x.setRequestHeader('Content-Type',file.type||'application/octet-stream');x.upload.onprogress=e=>e.lengthComputable&&onp(e.loaded/e.total);x.onload=()=>{let j={};try{j=JSON.parse(x.responseText)}catch(e){}x.status<300?ok(j):no(new Error(j.error||'فشل الرفع'))};x.onerror=()=>no(new Error('انقطع الاتصال أثناء الرفع'));x.send(file)});
+ const meta=await api('teacher','/api/teacher/upload',{name:file.name,mime:file.type});await new Promise((ok,no)=>{const x=new XMLHttpRequest();x.open('PUT',meta.signedUrl);x.setRequestHeader('Content-Type',file.type||'application/octet-stream');x.upload.onprogress=e=>e.lengthComputable&&onp(e.loaded/e.total);x.onload=()=>x.status<300?ok():no(new Error('فشل رفع الملف إلى التخزين'));x.onerror=()=>no(new Error('انقطع الاتصال أثناء رفع الملف'));x.send(file)});if(url==='/api/teacher/hero')await api('teacher','/api/teacher/hero',{fileId:meta.fileId,mime:meta.mime});onp(1);return meta}
+
+// ---------- الأحداث ----------
+const FORMS={
+ async slogin(f){const r=await api('student','/api/student/login',{code:f.code});tok.student=sessionStorage.st=r.token;await loadStudent()},
+ async plogin(f){const r=await api('parent','/api/parent/login',{code:f.code});tok.parent=sessionStorage.pt=r.token;await loadParent()},
+ async tlogin(f){const r=await api('teacher','/api/teacher/login',{code:f.code});tok.teacher=r.token;await loadTeacher()},
+ async register(f,el){const r=await api('student','/api/register',f);const b=$('newcodes');b.classList.remove('hidden');b.innerHTML=`احتفظ بالأكواد التالية للدخول (صوّرها أو انسخها):<br><span dir="ltr" class="text-[#146c94]">كود الطالب: ${r.studentCode} | كود ولي الأمر: ${r.parentCode}</span>`;el.reset();return 'تم التسجيل. ادخل بكود الطالب، ثم أدخل كود الكورس الذي وصلك عبر واتساب.'},
+ async redeem(f){const r=await api('student','/api/student/redeem',f);await loadStudent();alert(r.course?`تم تفعيل كورس ${r.course} حتى ${fmtD(r.expiresAt)}.`:'تم تفعيل الاشتراك بنجاح.')},
+ async message(f){await api('student','/api/student/message',f);await loadStudent()},
+ async notes(f){await api('student','/api/student/notes',f);await loadStudent()},
+ async assistant(f){const r=await api('student','/api/student/assistant',{question:f.question});const box=document.querySelector('[data-assistant-answer]');if(box)box.textContent=r.answer;return 'تم الرد من المساعد.'},
+ async appeal(f,el){await api('student','/api/student/appeal',{resultId:el.dataset.id,reason:f.reason});await loadStudent()},
+ async exam(f,el){const e=S.exams.find(x=>x.id===el.dataset.id),a=e.questions.map((_,i)=>(el.querySelector(`[name=q${i}]:checked`)||el.querySelector(`textarea[name=q${i}]`)||{}).value||'');const r=await api('student','/api/student/exam',{examId:e.id,answers:a});el.closest('div[style*=fixed]').remove();await loadStudent();alert(r.score!==null?'تم التصحيح تلقائياً: '+r.score+' / '+r.total:'تم إرسال الإجابات للتصحيح.')},
+ async settings(f,el){const h=el.hero.files[0];if(h)await upload('/api/teacher/hero',h,()=>{});await api('teacher','/api/teacher/settings',{name:f.name,password:f.password,payments:f.payments});const p=await (await fetch(BASE+'/api/public')).json();$('pname').textContent=p.name;if(p.hero)$('hero').src=BASE+p.hero+'&t='+Date.now();await loadTeacher();return 'تم حفظ الإعدادات.'},
+ async course(f,el){const cover=el.querySelector('[name="cover"]').files[0];let payload={...f};if(cover){const up=await upload('/api/teacher/upload',cover,()=>{});payload={...payload,imageFileId:up.fileId,mime:up.mime};}payload.isFree = !!f.isFree;await api('teacher','/api/teacher/course',payload);await loadTeacher();return 'تم نشر الكورس.'},
+ async notice(f){await api('teacher','/api/teacher/notice',f);await loadTeacher()},
+ async codes(f){const r=await api('teacher','/api/teacher/codes',f);lastCodes=r.codes.join('\n');lastCodesMessage=`أكواد تفعيل ${r.course?`كورس ${r.course.title} • السعر ${r.course.price} جنيه • المدة ${r.days} يوم`:`الاشتراك العام • المدة ${r.days} يوم`}:\n${lastCodes}`;await loadTeacher()},
+ async content(f,el){const file=$('cf').files[0];let meta={};
+  if(!f.title.trim())throw new Error('أدخل عنوان المحتوى.');if(!file&&!f.link)throw new Error('اختر ملفاً من الأيقونات أو أدخل رابطاً.');
+  if(file){$('prog').classList.remove('hidden');const u=await upload('/api/teacher/upload',file,p=>{$('bar').style.width=(p*100)+'%';$('proglbl').textContent='جاري الرفع '+Math.round(p*100)+'%'});meta={fileId:u.fileId,fileName:u.fileName,mime:u.mime}}
+  await api('teacher','/api/teacher/content',{...f,...meta,isFree:!!f.isFree});await loadTeacher();return 'تم نشر المحتوى.'},
+ async 'exam-new'(f,el){const items=[...el.querySelectorAll('[data-qb]')].map(c=>({kind:c.querySelector('[data-k]').value,q:c.querySelector('[data-q]').value.trim(),options:[...c.querySelectorAll('[data-o]')].map(x=>x.value.trim()),answer:c.querySelector('[data-ans]').value,model:c.querySelector('[data-m]').value.trim()}));await api('teacher','/api/teacher/exam',{title:f.title,courseId:f.courseId,grade:f.grade,items});await loadTeacher();return 'تم نشر الامتحان.'}
+};
+document.addEventListener('submit',async e=>{const el=e.target.closest('[data-form]');if(!el)return;e.preventDefault();const b=el.querySelector('button:not([type=button])');
+ const f={};new FormData(el).forEach((v,k)=>{if(typeof v==='string')f[k]=v.trim()});b&&(b.disabled=true);
+ try{const m=await FORMS[el.dataset.form](f,el);if(m&&el.isConnected)say(el,m,true)}catch(x){say(el,x.message,false);if(el.dataset.form==='content')$('prog').classList.add('hidden')}finally{b&&(b.disabled=false)}});
+const ACT={
+ adminlink(){tabs('teacher');window.scrollTo({top:0,behavior:'smooth'})},back(){tabs('student')},courseLogin(){ document.querySelector('[data-auth-options]').scrollIntoView({behavior:'smooth',block:'center'}) },
+ slogout(){tok.student=sessionStorage.st='';$('s-dash').classList.add('hidden');$('s-auth').classList.remove('hidden')},
+ plogout(){tok.parent=sessionStorage.pt='';$('p-dash').classList.add('hidden');$('p-auth').classList.remove('hidden')},tlogout(){tabs('student')},
+ open(b){const role=b.dataset.role,c=(role==='student'?S.content:T.content).find(x=>x.id===b.dataset.id);if(role==='student'&&c)api('student','/api/student/activity',{contentId:c.id}).catch(()=>{});openFile(c,role)},
+ async pay(b){b.disabled=true;try{const r=await api('student','/api/student/pay',{courseId:b.dataset.id});location.href=r.url}catch(e){b.disabled=false;alert(e.message||'تعذر بدء الدفع')}},
+ exam(b){examModal(S.exams.find(x=>x.id===b.dataset.id))},
+ pick(b){const f=$('cf');f.accept=b.dataset.accept;f.value='';f.click()},
+ copycodes(){navigator.clipboard.writeText($('codesout').value).catch(()=>{$('codesout').select();document.execCommand('copy')})},
+ delcode:b=>['/api/teacher/codes/delete',{id:b.dataset.id}],delcontent:b=>['/api/teacher/content/delete',{id:b.dataset.id}],delexam:b=>['/api/teacher/exam/delete',{id:b.dataset.id}],delcourse:b=>['/api/teacher/course/delete',{id:b.dataset.id}],
+ extend:b=>['/api/teacher/student',{id:b.dataset.id,action:'extend',days:30}],block:b=>['/api/teacher/student',{id:b.dataset.id,action:'block'}],delstudent:b=>['/api/teacher/student',{id:b.dataset.id,action:'delete'}],supervisor:b=>['/api/teacher/student',{id:b.dataset.id,action:'supervisor'}],blockp:b=>['/api/teacher/parent',{id:b.dataset.id}],
+ grade:(b,v)=>['/api/teacher/grade',{id:b.dataset.id,score:v}],reply:(b,v)=>['/api/teacher/reply',{id:b.dataset.id,reply:v}],appeal:(b,v)=>['/api/teacher/appeal',{id:b.dataset.id,score:v}]
+};
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const fn=ACT[b.dataset.act];if(!fn)return;
+ const r=fn(b,b.dataset.needinput?(b.previousElementSibling.value||'').trim():undefined);if(!Array.isArray(r))return;
+ if(b.dataset.act==='grade'&&r[1].score==='')return;
+ if(b.dataset.confirm&&b.dataset.c!=='1'){b.dataset.c='1';b.textContent='تأكيد؟ اضغط مرة أخرى';return}
+ b.disabled=true;try{await api('teacher',r[0],r[1]);await loadTeacher()}catch(x){alert(x.message);b.disabled=false}});
+document.addEventListener('change',e=>{if(e.target.matches('[data-code-course]')){const selected=e.target.selectedOptions[0],days=e.target.form.elements.days;if(selected.dataset.days)days.value=selected.dataset.days;return}if(e.target.id!=='cf')return;const f=e.target.files[0];if(!f)return;$('cfname').textContent='تم اختيار: '+f.name+' ('+(f.size/1048576).toFixed(1)+'MB)';const fm=e.target.closest('form'),t=fm.querySelector('[name=type]');
+ if(f.type.startsWith('video/'))t.value='video';else if(f.type.startsWith('image/'))t.value='image';else if(['video','image'].includes(t.value))t.value='note';const ti=fm.querySelector('[name=title]');if(!ti.value.trim())ti.value=f.name.replace(/\.[^.]+$/,'')});
+ready.then(ok=>{if(ok&&tok.student)loadStudent();if(ok&&tok.parent)loadParent()});
+const themeToggle=$('theme-toggle');
+function applyTheme(theme){const dark=theme==='dark';document.body.dataset.theme=dark?'dark':'light';themeToggle.setAttribute('aria-pressed',String(dark));themeToggle.querySelector('span').textContent=dark?'الوضع الفاتح':'الوضع الداكن';themeToggle.style.background=dark?'#233844':'#fff';themeToggle.style.color=dark?'#e7f0f5':'#102a43';try{localStorage.setItem('platform-theme',dark?'dark':'light')}catch(e){}}
+let savedTheme='light';try{savedTheme=localStorage.getItem('platform-theme')||'light'}catch(e){}
+applyTheme(savedTheme);
+themeToggle.onclick=()=>applyTheme(document.body.dataset.theme==='dark'?'light':'dark');
+let installPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
+$('install-app').onclick=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;return}alert(/iphone|ipad|ipod/i.test(navigator.userAgent)?'لتثبيت المنصة: اضغط مشاركة ثم "إضافة إلى الشاشة الرئيسية".':'لتثبيت المنصة: افتح قائمة المتصفح ثم اختر "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".')};
+if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
