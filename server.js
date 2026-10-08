@@ -301,11 +301,15 @@ async function route(req, res) {
   if (m === 'POST' && p === '/api/register') {
     const b = await body(req), name = clean(b.name, 100), phone = clean(b.phone, 20), pphone = clean(b.parentPhone, 20);
     if (!name || !/^01\d{9}$/.test(phone) || !/^01\d{9}$/.test(pphone)) throw E(400, 'اكتب الاسم ورقمي هاتف صحيحين من 11 رقماً');
+    const pw = clean(b.password, 100);
+    if (pw.length < 4) throw E(400, 'اكتب كلمة سر من 4 أحرف على الأقل');
+    if (db.students.some(q => q.phone === phone)) throw E(409, 'رقم الهاتف مسجل بالفعل، ادخل بكلمة السر');
     if (db.students.length > 20000) throw E(400, 'تعذر التسجيل حالياً');
     const s = { id: rnd(6), code: mk('ST'), name, phone, grade: clean(b.grade, 80), governorate: clean(b.governorate, 60), center: clean(b.center, 60), village: clean(b.village, 60), parentName: clean(b.parentName, 100), parentPhone: pphone, status: 'active', subEnd: '', created: new Date().toISOString() };
+    s.pass = scrypt(pw, db.settings.salt + s.id);
     const pr = { id: rnd(6), code: mk('PR'), studentId: s.id, name: s.parentName, status: 'active' };
     db.students.push(s); db.parents.push(pr); save();
-    return send(res, 200, { studentCode: s.code, parentCode: pr.code });
+    return send(res, 200, { ok: true });
   }
   if (m === 'POST' && (p === '/api/student/login' || p === '/api/parent/login' || p === '/api/teacher/login')) {
     if (locked(req)) throw E(429, 'محاولات كثيرة، انتظر 10 دقائق');
@@ -319,8 +323,17 @@ async function route(req, res) {
       }
       return send(res, 200, { token: newSession('teacher', 'T') });
     }
-    const isS = p.includes('student'), list = isS ? db.students : db.parents, x = list.find(q => q.code === code);
-    if (!x) { fail(req); throw E(401, isS ? 'كود الطالب غير صحيح' : 'كود ولي الأمر غير صحيح'); }
+    const isS = p.includes('student'), phone = clean(b.phone, 20), pw = clean(b.password, 100);
+    let x = null;
+    if (phone && pw) {
+      const st = db.students.find(q => q.phone === phone && q.pass && scrypt(pw, db.settings.salt + q.id) === q.pass);
+      if (st) x = isS ? st : db.parents.find(q => q.studentId === st.id);
+    } else if (code) {
+      // حسابات قديمة بلا كلمة سر فقط
+      if (isS) x = db.students.find(q => q.code === code && !q.pass);
+      else { const pr = db.parents.find(q => q.code === code), st = pr && db.students.find(q => q.id === pr.studentId); if (pr && st && !st.pass) x = pr; }
+    }
+    if (!x) { fail(req); throw E(401, 'رقم الهاتف أو كلمة السر غير صحيحة'); }
     if (x.status === 'blocked') throw E(403, 'تم حجب هذا الحساب');
     return send(res, 200, { token: newSession(isS ? 'student' : 'parent', x.id) });
   }
@@ -477,7 +490,7 @@ async function route(req, res) {
       const f = await saveUpload(req, u); if (!f.mime.startsWith('image/')) { await rmFile(f.fileId); throw E(400, 'اختر صورة'); }
       await rmFile(db.settings.heroFile); Object.assign(db.settings, { heroFile: f.fileId, heroMime: f.mime, heroV: Date.now() }); save(); return send(res, 200, { ok: true });
     }
-    if (m === 'GET' && p === '/api/teacher/all') return send(res, 200, { name: db.settings.name, payments: db.settings.payments || [], orders: (db.orders || []).slice(-100).reverse().map(o => ({ id: o.id, status: o.status, amount: o.amount, created: o.created, paidAt: o.paidAt || '', student: (db.students.find(x => x.id === o.studentId) || {}).name || '', course: (db.courses.find(x => x.id === o.courseId) || {}).title || '' })), students: sup ? db.students.map(r => ({ ...r, code: '—' })) : db.students, parents: sup ? db.parents.map(r => ({ ...r, code: '—' })) : db.parents, courses: db.courses, content: db.content, notices: db.notices, exams: db.exams, results: db.results, appeals: db.appeals, messages: db.messages,
+    if (m === 'GET' && p === '/api/teacher/all') return send(res, 200, { name: db.settings.name, payments: db.settings.payments || [], orders: (db.orders || []).slice(-100).reverse().map(o => ({ id: o.id, status: o.status, amount: o.amount, created: o.created, paidAt: o.paidAt || '', student: (db.students.find(x => x.id === o.studentId) || {}).name || '', course: (db.courses.find(x => x.id === o.courseId) || {}).title || '' })), students: db.students.map(({ pass, ...r }) => (sup ? { ...r, code: '—' } : r)), parents: sup ? db.parents.map(r => ({ ...r, code: '—' })) : db.parents, courses: db.courses, content: db.content, notices: db.notices, exams: db.exams, results: db.results, appeals: db.appeals, messages: db.messages,
       codes: sup ? [] : db.codes.map(({ hash, ...c }) => c) });
     const b = await body(req), find = (arr, id) => { const x = arr.find(q => q.id === id); if (!x) throw E(404, 'غير موجود'); return x; };
     switch (p) {
@@ -547,6 +560,11 @@ async function route(req, res) {
       case '/api/teacher/student': {
         const s = find(db.students, b.id), pr = db.parents.find(x => x.studentId === s.id);
         if (sup && (b.action === 'supervisor' || b.action === 'delete')) throw E(403, 'هذه الصلاحية للمعلم فقط');
+        if (b.action === 'setpass') {
+          const pw2 = clean(b.password, 100);
+          if (pw2.length < 4) throw E(400, 'كلمة السر 4 أحرف على الأقل');
+          s.pass = scrypt(pw2, db.settings.salt + s.id);
+        } else
         if (b.action === 'supervisor') { s.supervisor = !s.supervisor; }
         else if (b.action === 'block') { s.status = s.status === 'blocked' ? 'active' : 'blocked'; }
         else if (b.action === 'extend') { const d = subActive(s) ? new Date(s.subEnd) : new Date(); d.setDate(d.getDate() + (Number(b.days) || 30)); s.subEnd = d.toISOString(); }
